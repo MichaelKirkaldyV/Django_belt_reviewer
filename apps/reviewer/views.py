@@ -16,28 +16,27 @@ def register(request):
 		for tag, error in errors.iteritems():
 			messages.error(request, error)
 			return redirect('/')
+	else:
+		#assigns post data to a variable. 
+		name = request.POST['name']
+		alias = request.POST['alias']
+		email = request.POST['email']
+		password = request.POST['password']
 
+		#generates a hashed password and generates a salt before being saved into the database. 
+		#.encode turns it into a usable string
+		hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 
-	#assigns post data to a variable. 
-	name = request.POST['name']
-	alias = request.POST['alias']
-	email = request.POST['email']
-	password = request.POST['password']
+		#Saves password as the hashed password! not the password itself. 
+		Users.objects.create(name=name, alias=alias, email=email, password=hashed_pw)
 
-	#generates a hashed password and generates a salt before being saved into the database. 
-	#.encode turns it into a usable string
-	hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
+		#gets email, where email is request.POST['email'], stores new entry to the variable.
+		user = Users.objects.get(email=email)
+		#sets said entries id to a session id.
+		#Django has the id field set to Autofield. No need to declare one in the model.
+		request.session['id'] = user.id
 
-	#Saves password as the hashed password! not the password itself. 
-	Users.objects.create(name=name, alias=alias, email=email, password=hashed_pw)
-
-	#gets email, where email is request.POST['email'], stores new entry to the variable.
-	user = Users.objects.get(email=email)
-	#sets said entries id to a session id.
-	#Django has the id field set to Autofield. No need to declare one in the model.
-	request.session['id'] = user.id
-
-	return redirect('/books')
+		return redirect('/')
 
 def login(request):
 
