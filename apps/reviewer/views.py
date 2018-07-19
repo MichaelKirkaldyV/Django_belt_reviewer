@@ -61,5 +61,20 @@ def login(request):
 		return redirect('/')		
 
 def books(request):
-	return render(request, 'reviewer/books.html')
+	#Basically if there is no session, which means there is no logged in user. This page cannot be accessed. So redirect to the index.
+	#Where the user can login/register
+	if not request.session['id']:
+		return redirect ('/')
+
+	context = {
+		#User in the context of this template is to grab the user id of this session.
+		#Books in this context is to grab all the books to be displayed in a list. 
+		"user": Users.objects.get(id=request.session['id']),
+		"books": Books.objects.all()
+	}
+	return render(request, 'reviewer/books.html', context)
+
+def logout(request):
+	request.session.clear()
+	return redirect('/')
 
