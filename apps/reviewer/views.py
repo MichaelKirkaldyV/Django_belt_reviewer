@@ -35,6 +35,7 @@ def register(request):
 		#sets said entries id to a session id.
 		#Django has the id field set to Autofield. No need to declare one in the model.
 		request.session['id'] = user.id
+		print user
 
 		return redirect('/')
 
@@ -46,8 +47,6 @@ def login(request):
 	#gets email where email 
 	user = Users.objects.filter(email=email)
 
-	
-	
 	if len(user) > 0:
 		this_password = bcrypt.checkpw(password.encode(), user[0].password.encode())
 		if this_password:

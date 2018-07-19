@@ -1,0 +1,14 @@
+.container{
+	height: 600px;
+	width: 1000px;
+	padding: 20px;
+	border: 4px solid black;
+}
+.header{
+	width: 900px;
+	height: 100px;
+}
+
+.recent_reviews{
+
+}

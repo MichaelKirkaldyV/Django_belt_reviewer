@@ -23,6 +23,7 @@
 				<label>Confirm Password</label>
 				<input type="password" name="cnfrm_password">
 				<input type="submit" name="submit" value="Register">
+
 			</form>	
 		</div>
 		<div class="login">
@@ -34,10 +35,13 @@
 				<label>Password</label>
 				<input type="password" name="password">
 				<input type="submit" name="submit" value="Login">
-			
 			</form>
-			
 		</div>
+		{% if messages %}
+					{% for message in messages %}
+						{{message}}
+					{% endfor %}
+				{% endif %}
 	</div>
 
 </body>
