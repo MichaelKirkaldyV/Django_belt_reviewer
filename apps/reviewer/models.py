@@ -12,6 +12,8 @@ class UserManager(models.Manager):
 			errors['name'] = "Name must be 2 characters or more in length"
 
 		#Email validation
+		if len(postData['email']) < 4:
+			errors['email'] = "Email must be more than 8 characters in length"
 
 
 		#Password Validation
