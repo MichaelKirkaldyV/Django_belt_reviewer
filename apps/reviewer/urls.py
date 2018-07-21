@@ -6,6 +6,8 @@ urlpatterns = [
   url(r'^login$', views.login),
   url(r'^books$', views.books),
   url(r'^logout$', views.logout),
+  url(r'^add$', views.book_add),
+  url(r'^save/book$', views.save_book),
 
 
 ]

@@ -5,49 +5,58 @@ from django.db import models
 
 class UserManager(models.Manager):
 	def validate_user(request, postData):
-		errors = {}
+		errors = []
 
 		#Name validation
 		if len(postData['name']) < 2:
-			errors['name'] = "Name must be 2 characters or more in length"
+			errors.append("Name must be 2 characters or more in length")
 
 		#Email validation
 		if len(postData['email']) < 4:
-			errors['email'] = "Email must be more than 8 characters in length"
+			errors.append("Email must be more than 8 characters in length")
 
 
 		#Password Validation
 		if len(postData['password']) < 8:
-			errors['password'] = "Password must be at least 8 characters"
+			errors.append("Password must be at least 8 characters")
 
 		#Password match validation
 		if postData['password'] != postData['cnfrm_password']:
-			errors['password'] = "Passwords do not match"
+			errors.append("Passwords do not match")
 
 		return errors
 
 class BooksManager(models.Manager):
 	def validate_book(request, postData):
-		errors = {}
+		errors = []
 
 		#Title validation
 		if len(postData['title']) < 2:
-			error['title'] = "Title name is too short"
+			errors.append("Title name is too short")
 
-		if len(postData['desc']) < 10:
-			error['desc'] = "The summary must be more than 10 characters long"
+		if len(postData['author']) < 2:
+			errors.append("The summary must be more than 10 characters long")
 
 		return errors
 
 class ReviewManager(models.Manager):
 	def validate_review(request, postData):
-		errors = {}
+		errors = []
 
 		if len(postData['title']) < 2:
-			error['title'] = "The title is too short"
+			errors.append("The title is too short")
 
 		if len(postData['content']) < 10:
-			error['content'] = "Content must be more than 10 characters long"
+			errors.append("Content must be more than 10 characters long")
+
+		return errors
+
+class AuthorManager(models.Manager):
+	def validate_author(request, postData):
+		errors = []
+
+		if len(postData['author_name']) < 2:
+			errors.append("The name must be longer than 2 characters long")
 
 		return errors
 
@@ -67,7 +76,7 @@ class Users(models.Model):
 class Books(models.Model):
 	#Django has the id field set to Autofield. No need to declare one in the model.
 	title = models.CharField(max_length=255)
-	desc = models.CharField(max_length=255)
+	author = models.CharField(max_length=255)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 	objects = BooksManager()
@@ -82,4 +91,10 @@ class Review(models.Model):
 	book = models.ForeignKey(Books, related_name="reviews")
 	user = models.ForeignKey(Users, related_name="reviews")
 	objects = ReviewManager()
+
+class Authors(models.Model):
+	name = models.CharField(max_length=255)
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+	objects = AuthorManager()
 

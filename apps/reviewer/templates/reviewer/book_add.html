@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add a book or review</title>
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'reviewer/css/index.css' %}">
+</head>
+<body>
+	<div class="header">
+		<h1>Add a new book title or a review</h1>
+		<a href="/books">Home</a>
+		<a href="/logout">Logout</a>
+	</div>
+	<div class="content">
+		<form action="/save/book" method="POST">
+			{% csrf_token %}
+			<label>Book</label>
+			<input type="text" name="title">
+			<label>Author</label>
+			<label>Choose from the list:</label>
+			{% if authors %}
+			<select name="author_menu">
+				{% for author in authors %}
+				<option>{{author.author}}</option>
+				{% endfor %}
+			</select>
+			{% endif %}
+			<label>Or add a new author:</label>
+			<input type="text" name="author_name">
+			<label>Review:</label>
+			<textarea name="review"></textarea>
+			<label>Rating</label>
+			<select name="rating">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+			</select> stars.
+			<input type="submit" value="Add book or review">
+		</form>
+		{% if messages %}
+					{% for message in messages %}
+						{{message}}
+					{% endfor %}
+				{% endif %}
+	</div>
+</body>
+</html>

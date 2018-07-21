@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.shortcuts import render, redirect, HttpResponse
 import bcrypt
 from .models import *
+from django.contrib import messages
 
 
 def index(request):
@@ -44,7 +44,7 @@ def login(request):
 	email = request.POST['email']
 	password = request.POST['password']
 	
-	#gets email where email 
+	#filters and gets the email that is the request.POST
 	user = Users.objects.filter(email=email)
 
 	if len(user) > 0:
@@ -77,4 +77,37 @@ def books(request):
 def logout(request):
 	request.session.clear()
 	return redirect('/')
+
+def book_add(request):
+	context = {
+		"authors": Authors.objects.all()
+	}
+	return render(request, 'reviewer/book_add.html', context)
+
+def save_book(request):
+	Books.objects.validate_book(request.POST)
+
+	if len(errors):
+		for tag, error in errors.iteritems():
+			messages.error(request, error)
+			return redirect('/book_add')
+	else:
+		title = request.POST['title']
+		if request.POST['author_name'] == "":
+			author = Authors.objects.get(id=request.POST['author_menu'])
+		else:
+			errors = Authors.objects.validate_author(request.POST)
+			author = Authors.objects.create(author=request.POST['author_name'])
+		
+		rating = request.POST['rating']
+		review = request.POST['review']
+
+		#takes the title/author post fields and saves them as a book to the database and assigns it to book.
+		#then takes review,rating and the session id of user, as user and the book we just created and creates a review.
+		book = Books.objects.create(title=title, author=author)
+		Review.objects.create(content=review, rating=rating, user=Users.objects.get(id=request.session['id']), book=book)
+
+		return redirect('/books/book.id')
+
+
 
