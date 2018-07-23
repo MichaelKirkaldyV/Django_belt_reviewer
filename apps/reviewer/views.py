@@ -70,7 +70,8 @@ def books(request):
 		#User in the context of this template is to grab the user id of this session.
 		#Books in this context is to grab all the books to be displayed in a list. 
 		"user": Users.objects.get(id=request.session['id']),
-		"books": Books.objects.all()
+		"books": Books.objects.all(),
+		"reviews": Review.objects.all().order_by("-created_at")#Puts in reverse order. 
 	}
 	return render(request, 'reviewer/books.html', context)
 
@@ -85,7 +86,7 @@ def book_add(request):
 	return render(request, 'reviewer/book_add.html', context)
 
 def save_book(request):
-	Books.objects.validate_book(request.POST)
+	errors = Books.objects.validate_book(request.POST)
 
 	if len(errors):
 		for tag, error in errors.iteritems():
@@ -97,7 +98,7 @@ def save_book(request):
 			author = Authors.objects.get(id=request.POST['author_menu'])
 		else:
 			errors = Authors.objects.validate_author(request.POST)
-			author = Authors.objects.create(author=request.POST['author_name'])
+			author = Authors.objects.create(name=request.POST['author_name'])
 		
 		rating = request.POST['rating']
 		review = request.POST['review']
@@ -108,6 +109,13 @@ def save_book(request):
 		Review.objects.create(content=review, rating=rating, user=Users.objects.get(id=request.session['id']), book=book)
 
 		return redirect('/books/book.id')
+
+def show_book(request, id):
+	content = {
+		"books":Books.objects.get(id=id),
+		"reviews":Review.objects.filter(book=books).order_by('-created_at')
+	}
+	return render(request, 'reviewer/show_book.html', context)
 
 
 

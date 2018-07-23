@@ -12,12 +12,27 @@
 				<h2>Recent book reviews:</h2>
 				<a href="/add">Add a book or review</a>
 				<a href="/logout">Logout</a>
-
 		</div>
 		<div class="recent_reviews">
+			{% if reviews %}
+				{% for review in reviews %}
+					<a href="/books/{{review.book.id}}">{{review.book.title}}</a>
+					{{review.content}}
+					<p>Star Rating:</p>{{review.rating}}
+					<p>Posted: {{review.created_at}}</p>
+					<hr>
+				{% endfor %}
+			{% endif %}
+
 			
 		</div>
 		<div class="other_reviews">
+			<h2>Other books with reviews:</h2>
+			{% if books %}
+				{% for book in books %}
+					<a href="/books/{{book.id}}">{{book.title}}</a>
+				{% endfor %}
+			{% endif %}
 			
 		</div>	
 	</div>

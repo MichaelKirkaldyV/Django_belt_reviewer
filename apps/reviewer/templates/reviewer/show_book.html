@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Books reviews</title>
+	{% load static %}
+</head>
+<body>
+	<h1>{{Book.title}}</h1>
+	<h2>{{Book.user}}</h2>
+	<div class="container">
+		<div class="reviews">
+			<h2>Reviews</h2>
+			
+		</div>
+		<div class="add_review">
+			<h2>Add a review:</h2>
+			<form action="" method="POST">
+				<textarea></textarea>
+				<select>Rating:
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>stars.
+				</select>
+				<input type="submit" name="add_review" value="Submit Review">
+			</form>
+			
+		</div>
+		
+
+	</div>
+
+</body>
+</html>

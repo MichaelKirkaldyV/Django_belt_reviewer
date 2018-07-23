@@ -14,14 +14,14 @@
 	<div class="content">
 		<form action="/save/book" method="POST">
 			{% csrf_token %}
-			<label>Book</label>
+			<label>Book:</label>
 			<input type="text" name="title">
-			<label>Author</label>
+			<label>Author:</label>
 			<label>Choose from the list:</label>
 			{% if authors %}
 			<select name="author_menu">
 				{% for author in authors %}
-				<option>{{author.author}}</option>
+				<option>{{author.name}}</option>
 				{% endfor %}
 			</select>
 			{% endif %}
@@ -44,6 +44,7 @@
 						{{message}}
 					{% endfor %}
 				{% endif %}
+
 	</div>
 </body>
 </html>

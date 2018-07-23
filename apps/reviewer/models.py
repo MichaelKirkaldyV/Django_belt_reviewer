@@ -34,7 +34,7 @@ class BooksManager(models.Manager):
 		if len(postData['title']) < 2:
 			errors.append("Title name is too short")
 
-		if len(postData['author']) < 2:
+		if len(postData['author_name']) < 2 and len(postData['author_menu']) == 0:
 			errors.append("The summary must be more than 10 characters long")
 
 		return errors
